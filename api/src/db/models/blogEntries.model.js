@@ -1,10 +1,11 @@
 const { DataTypes } = require('sequelize');
 const db = require('../connection');
+const sequelize = db.getInstance();
 
 /**
  * Modelo que almacena entradas de blog
  */
-const BlogEntries = db.define('blog_entries', {
+const BlogEntries = db.instance.define('blog_entries', {
     title: {
         type: DataTypes.STRING,
         allowNull: false,
@@ -18,5 +19,6 @@ const BlogEntries = db.define('blog_entries', {
         allowNull: false,
     }
 });
+
 
 module.exports = BlogEntries;

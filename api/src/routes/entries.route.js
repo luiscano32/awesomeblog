@@ -33,7 +33,7 @@ router.post('/', [
         .notEmpty()
         .withMessage('invalid content'),
         
-], UserController.create);
+], BlogEntriesController.create);
 
 // actualización de entrada por id
 router.put('/:entryId', validateToken, BlogEntriesController.update);

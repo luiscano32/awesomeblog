@@ -2,11 +2,12 @@ const { DataTypes } = require('sequelize');
 const bcrypt = require('bcrypt');
 
 const db = require('../connection');
+const sequelize = db.getInstance();
 
 /**
  * Modelo que almacena usuarios de blog
  */
-const Users = db.instance.define('users', {
+const Users = sequelize.define('users', {
     username: {
         type: DataTypes.STRING,
         unique: true,

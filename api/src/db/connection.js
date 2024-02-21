@@ -14,7 +14,7 @@ const {
 
 class db {
 
-    static instance;
+    static instance = null;
 
     /**
      * crea la base de datos si no existe
@@ -34,6 +34,9 @@ class db {
         }
     }
 
+    static getInstance() {
+        return this.instance;
+    }
     
     /**
      * Inicialización de Sequelize
@@ -50,6 +53,18 @@ class db {
             dialect,
             logging: false,
         });
+
+        // se llama a indexador de modelos para definir modelos previos a sincronización
+        require('./models');
+        
+        // sincronización de tablas de base de datos con modelos
+        await this.instance.sync()
+            .then(() => {
+                console.log('Database tables properly synchronized');
+            })
+            .catch((err) => {
+                console.error('Error when attempting to synchronize database tables: ', err);
+            });
 
         try {
             // realiza intento de conexión con base de datos

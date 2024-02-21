@@ -11,11 +11,13 @@ const { BlogEntriesService } = require('../services');
  */
 const getAll = async(req, res) => {
 
-    // valida que solicitud tenga parámetros requeridos
-    const validationResult = validateRequiredParams(req, res);
-    if(validationResult) return validationResult;
+    // obtiene todas las entradas existentes
+    const result = await BlogEntriesService.getAll();
 
-    return res.send('test get all');
+    // devuelve respuesta http
+    return (result.status === 'success') 
+        ? res.send(result)
+        : res.status(400).json(result);
 };
 
 /**
@@ -26,11 +28,14 @@ const getAll = async(req, res) => {
  */
 const getById = async(req, res) => {
 
-    // valida que solicitud tenga parámetros requeridos
-    const validationResult = validateRequiredParams(req, res);
-    if(validationResult) return validationResult;
+    // llama a método para obtención de entrada por id
+    const { entryId } = req.params;
+    const result = await BlogEntriesService.getById(entryId);
 
-    return res.send('test get by id');
+    // devuelve respuesta http
+    return (result.status === 'success') 
+        ? res.send(result)
+        : res.status(400).json(result);
 };
 
 /**
@@ -45,11 +50,19 @@ const create = async(req, res) => {
     const validationResult = validateRequiredParams(req, res);
     if(validationResult) return validationResult;
 
-    return res.send('test create');
+    // extracción de parámetros del body de la solicitud
+    const { title, author, content } = req.body;
+
+    // creación de usuario mediante servicio
+    const result = await BlogEntriesService.create(title, author, content);
+    // devuelve respuesta http
+    return (result.status === 'success') 
+        ? res.send(result)
+        : res.status(400).json(result);
 };
 
 /**
- * Creación de entrada de blog en base de datos
+ * Actualiza una entrada de blog en base de datos
  * @param { object } req - Objeto con datos de solicitud http
  * @param { object } res - Objeto con datos de respuesta http
  * @returns object
@@ -60,7 +73,15 @@ const update = async(req, res) => {
     const validationResult = validateRequiredParams(req, res);
     if(validationResult) return validationResult;
 
-    return res.send('test update');
+    const { entryId } = req.params;
+    const entry = req.body;
+
+    // actualiza datos de entrada
+    const result = await BlogEntriesService.update(entryId, entry);
+    // devuelve respuesta http
+    return (result.status === 'success') 
+        ? res.send(result)
+        : res.status(400).json(result);
 };
 
 /**
@@ -71,11 +92,14 @@ const update = async(req, res) => {
  */
 const destroy = async(req, res) => {
 
-    // valida que solicitud tenga parámetros requeridos
-    const validationResult = validateRequiredParams(req, res);
-    if(validationResult) return validationResult;
+    const { entryId } = req.params;
+    // elimina entrada de blog por id
+    const result = await BlogEntriesService.delete(entryId);
 
-    return res.send('test delete');
+    // devuelve respuesta http
+    return (result.status === 'success') 
+        ? res.send(result)
+        : res.status(400).json(result);
 };
 
 

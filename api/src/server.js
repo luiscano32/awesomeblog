@@ -9,7 +9,6 @@ class Server {
     port = null;
     apiPaths = {
         'user': '/api/user',
-        'auth': '/api/auth',
         'entries': '/api/entries',
     };
 
@@ -38,17 +37,7 @@ class Server {
         try {
             // realiza conexión a bdd
             await db.initializeSequelize();
-
-            // sincronización de tablas de base de datos con modelos
-            db.instance.sync()
-                .then(() => {
-                    console.log('Database tables properly synchronized');
-                })
-                .catch((err) => {
-                    console.error('Error when attempting to synchronize database tables: ', err);
-                });
-
-                callback && callback();
+            callback && callback();
         } catch (error) {
             console.error('Error while connecting to database');
             throw new Error(error.message);
@@ -61,6 +50,7 @@ class Server {
     initRoutes() {
         const Route = require('./routes');
         this.app.use(this.apiPaths.user, Route.user);
+        this.app.use(this.apiPaths.entries, Route.blogEntries);
     }
 
     /**
@@ -70,7 +60,7 @@ class Server {
         this.app.listen(this.port, () => {
             console.log(
                 `****************************************************\n` + 
-                ` AWESOMEBLOG APP (created by Luis Cano  20-04-2024)\n`  +
+                ` AWESOMEBLOG APP (created by Luis Cano)\n`  +
                 `****************************************************`
             );
             console.log(`Awesome_api app listening on port (${ this.port })`);
