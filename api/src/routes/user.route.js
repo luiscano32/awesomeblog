@@ -11,7 +11,9 @@ const router = Router();
 
 // creación de usuarios
 router.post('/', [
-    
+    /**
+     * Middlewares
+     */
     body('username')
         .notEmpty()
         .withMessage('invalid username'),
@@ -23,7 +25,9 @@ router.post('/', [
 
 // login de usuario
 router.post('/login', [
-    
+    /**
+     * Middlewares
+     */
     body('username')
         .notEmpty()
         .withMessage('invalid username'),
